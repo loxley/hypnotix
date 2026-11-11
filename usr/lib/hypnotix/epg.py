@@ -151,7 +151,10 @@ class XMLTVParser:
 
     @staticmethod
     def _open_source(file_path: str):
-        if file_path.endswith(".gz"):
+        # Download URLs and cache filenames may not reflect the actual format.
+        with open(file_path, "rb") as source:
+            is_gzip = source.read(2) == b"\x1f\x8b"
+        if is_gzip:
             return gzip.open(file_path, "rb")
         return open(file_path, "rb")
 
